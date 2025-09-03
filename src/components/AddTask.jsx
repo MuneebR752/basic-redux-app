@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { addTask } from "../store";
+import { addTasks } from "../features/todos/todosSlice";
 import { useState } from "react";
 function AddTask() {
   let [task, setTask] = useState("");
@@ -20,7 +20,7 @@ function AddTask() {
       />
       <Button
         onClick={() => {
-          dispatch(addTask(task));
+          dispatch(addTasks(task));
         }}
         variant="contained"
       >

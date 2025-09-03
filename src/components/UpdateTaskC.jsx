@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { updateTask } from "../store";
+import { updateTask } from "../features/todos/todosSlice";
 import { useState } from "react";
 function UpdateTaskC({ task, close }) {
   let [updatedTask, setUpdatedTask] = useState(task.taskName);
@@ -19,7 +19,7 @@ function UpdateTaskC({ task, close }) {
       />
       <Button
         onClick={() => {
-          dispatch(updateTask(task.id, updatedTask));
+          dispatch(updateTask({ id: task.id, value: updatedTask }));
           close();
         }}
         variant="contained"

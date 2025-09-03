@@ -9,15 +9,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "@mui/material/Dialog";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteTask } from "../store/index";
+import { deleteTask } from "../features/todos/todosSlice";
 import { Button } from "@mui/material";
 import UpdateTaskC from "./UpdateTaskC";
 import React from "react";
 export default function BasicTable() {
-  const tasks = useSelector((state) => state);
+  const tasks = useSelector((state) => state.todos.tasks);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-
+  const [activeDialog, setActiveDialog] = React.useState(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -34,7 +34,7 @@ export default function BasicTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {tasks.map((task) => (
+          {tasks.map((task, i) => (
             <TableRow
               key={task.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -43,17 +43,14 @@ export default function BasicTable() {
                 {task.taskName}
               </TableCell>
               <TableCell>
-                <Button onClick={handleClickOpen}>
+                <Button
+                  onClick={() => {
+                    setActiveDialog(i);
+                    handleClickOpen();
+                  }}
+                >
                   <EditIcon />
                 </Button>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <UpdateTaskC task={task} close={handleClose} />
-                </Dialog>
               </TableCell>
               <TableCell>
                 <Button onClick={() => dispatch(deleteTask(task.id))}>
@@ -62,6 +59,14 @@ export default function BasicTable() {
               </TableCell>
             </TableRow>
           ))}
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <UpdateTaskC task={tasks[activeDialog]} close={handleClose} />
+          </Dialog>
         </TableBody>
       </Table>
     </TableContainer>
